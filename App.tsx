@@ -50,22 +50,77 @@ const App: React.FC = () => {
     return Array.from(uniqueEventsMap.values());
   }, []);
 
+  const normalizeQuery = useCallback((q: string) => {
+    // Normalize to NFKC, remove zero-width characters, convert full-width spaces to ASCII, collapse spaces
+    const zeroWidth = /[\u200B-\u200D\uFEFF]/g; // ZWSP, ZWNJ, ZWJ, BOM
+    return q
+      .normalize('NFKC')
+      .replace(zeroWidth, '')
+      .replace(/\u3000/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }, []);
+
   const handleSearch = useCallback(() => {
-    const trimmedQuery = searchQuery.trim();
-    if (!trimmedQuery) {
+    const normalized = normalizeQuery(searchQuery);
+    if (!normalized) {
       setSearchResults(undefined);
       return;
     }
-    const names = trimmedQuery.split(/\s+/).filter(Boolean);
-    const results = names
-      .map(name => participantsData.get(name))
-      .filter((participant): participant is Participant => !!participant);
+    const tokens = normalized.split(' ').filter(Boolean);
 
-    // Create a unique list of participants based on their name
-    const uniqueResults = Array.from(new Map(results.map(p => [p.name, p])).values());
+    // Collect results, splitting homonyms (multiple details) into separate cards
+    const results: Participant[] = [];
+    const seen = new Set<string>();
 
-    setSearchResults(uniqueResults);
-  }, [searchQuery]);
+    for (const [, participant] of participantsData.entries()) {
+      const baseName = participant.name;
+      if (!tokens.some(t => baseName.includes(t))) continue;
+
+      const details = (memberDetails as Record<string, any>)[baseName];
+      if (Array.isArray(details)) {
+        // If this participant identity is disambiguated (has grade/department), only show the matching one
+        if (participant.grade && participant.department) {
+          const match = details.find((d: any) => d.grade === participant.grade && d.department === participant.department);
+          if (match) {
+            const displayName = `${baseName}（${match.department}・${match.grade}年）`;
+            if (!seen.has(displayName)) {
+              seen.add(displayName);
+              results.push({ ...participant, name: displayName });
+            }
+          } else {
+            // No match found (shouldn't happen), fallback to base name once
+            if (!seen.has(baseName)) {
+              seen.add(baseName);
+              results.push(participant);
+            }
+          }
+        } else {
+          // Unknown identity: show all variants (legacy behavior)
+          for (const d of details) {
+            const displayName = `${baseName}（${d.department}・${d.grade}年）`;
+            if (seen.has(displayName)) continue;
+            seen.add(displayName);
+            results.push({ ...participant, name: displayName });
+          }
+        }
+      } else if (details) {
+        const displayName = `${baseName}（${details.department}・${details.grade}年）`;
+        if (!seen.has(displayName)) {
+          seen.add(displayName);
+          results.push({ ...participant, name: displayName });
+        }
+      } else {
+        // Fallback if no details are found
+        if (!seen.has(baseName)) {
+          seen.add(baseName);
+          results.push(participant);
+        }
+      }
+    }
+
+    setSearchResults(results);
+  }, [normalizeQuery, searchQuery]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -82,7 +137,11 @@ const App: React.FC = () => {
     );
     if (eventData) {
       const occurrenceMap = new Map<string, number>();
-      const participantsWithDetails: ParticipantDetails[] = eventData.members.map(name => {
+      const participantsWithDetails: ParticipantDetails[] = (eventData.members as any[]).map((m: any) => {
+        if (typeof m === 'object' && m && 'name' in m && 'grade' in m && 'department' in m) {
+          return { name: m.name as string, grade: m.grade as number, department: m.department as string };
+        }
+        const name = m as string;
         const details = (memberDetails as Record<string, any>)[name];
         // Fallback for any participant not in the details map
         if (!details) return { name, grade: 0, department: '不明' };
@@ -146,7 +205,7 @@ const App: React.FC = () => {
              <EventList events={uniqueEvents} onEventClick={handleEventClick} />
           )}
           {searchResults !== undefined && searchResults.length === 0 && (
-            <InfoCard icon="🤷" title="選手が見つかりません" text="入力した名前をもう一度確認してください。完全一致でのみ検索されます。" />
+            <InfoCard icon="🤷" title="選手が見つかりません" text="入力した名前をもう一度確認してください。部分一致で検索されます。" />
           )}
           {searchResults && searchResults.length > 0 && (
             <div className="w-full max-w-2xl flex flex-col gap-8">

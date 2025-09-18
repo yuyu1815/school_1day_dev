@@ -31,6 +31,15 @@ export const EventParticipantsModal: React.FC<EventParticipantsModalProps> = ({ 
   }, []);
 
   const groupedParticipants = useMemo(() => {
+    // Build frequency of base names within this event to detect duplicates
+    const baseName = (n: string) => n.replace(/\(.+?\)/g, '');
+    const freq = new Map<string, number>();
+    for (const p of participants) {
+      const key = baseName(p.name);
+      freq.set(key, (freq.get(key) ?? 0) + 1);
+    }
+
+    // Prepare groups: department -> grade -> names[]
     const groups: Record<string, Record<string, string[]>> = {};
 
     participants.forEach(p => {
@@ -43,7 +52,12 @@ export const EventParticipantsModal: React.FC<EventParticipantsModalProps> = ({ 
       if (!groups[departmentKey][gradeKey]) {
         groups[departmentKey][gradeKey] = [];
       }
-      groups[departmentKey][gradeKey].push(p.name);
+
+      const needsSuffix = (freq.get(baseName(p.name)) ?? 0) > 1;
+      const alreadyHasParen = /\(.+?\)/.test(p.name);
+      const displayName = needsSuffix && !alreadyHasParen ? `${p.name}(${gradeKey})` : p.name;
+
+      groups[departmentKey][gradeKey].push(displayName);
     });
 
     // Sort departments alphabetically

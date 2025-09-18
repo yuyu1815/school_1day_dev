@@ -2,7 +2,8 @@ import { type Participant, EventName, type EventParticipation } from '../types';
 
 const SCHOOL_NAME = '穴吹コンピュータカレッジ';
 
-export const rawData: { eventName: EventName; team: string; details: string; members: string[] }[] = [
+type MemberEntry = string | { name: string; grade: number; department: string };
+export const rawData: { eventName: EventName; team: string; details: string; members: MemberEntry[] }[] = [
   {
     eventName: EventName.LeggedRace,
     team: '20人21脚チーム',
@@ -19,25 +20,51 @@ export const rawData: { eventName: EventName; team: string; details: string; mem
     eventName: EventName.BallCarry,
     team: 'Aチーム',
     details: 'Aコース',
-    members: ['丸山(1年)', '山中', '宮野', 'ペア', '松下', '片山', '竹内', '平井', '直井', '岩瀬', '河野', '大塚', '森', '植村', '茶園', '水野', '矢野', '武智', '十川', '山崎悟', '太田', '真嶋', '三好', '上井', '高木', '今治', '木村', '丸山(3年)', '細井', '高須賀']
+    members: [
+      { name: '丸山', grade: 1, department: 'IS・AI・NS' },
+      '山中', '宮野', 'ペア', '松下', '片山', '竹内', '平井',
+      '直井', '岩瀬', '河野', '大塚', '森', '植村', '茶園', '水野',
+      '矢野', '武智', '十川', '山崎悟',
+      '太田', '真嶋', '三好',
+      '上井', '高木', '今治', '木村',
+      { name: '丸山', grade: 3, department: 'IS・AI' },
+      '細井', '高須賀'
+    ]
   },
   {
     eventName: EventName.BallCarry,
     team: 'Bチーム',
     details: 'Aコース',
-    members: ['小野', '福岡(1年)', '玉城', '森藤', '福家(1年)', '中條', '鴨井', '内海', '三嶋(1年)', '諏訪', '柾木', '神内', '岩瀬', '河野', '齋藤', '國方', '福井', '中村', '山崎駿', '逸見', '岡', '小笠原', '好井', '谷口', '中西', '長谷川', '藤田', '滝口', '筒井', '黒川']
+    members: [
+      '小野',
+      { name: '福岡', grade: 1, department: 'IS・AI・NS' },
+      '玉城', '森藤',
+      { name: '福家', grade: 1, department: 'IS・AI・NS' },
+      '中條', '鴨井', '内海',
+      { name: '三嶋', grade: 1, department: 'IS・AI・NS' },
+      '諏訪', '柾木', '神内', '岩瀬', '河野', '齋藤', '國方',
+      '福井', '中村', '山崎駿', '逸見',
+      '岡', '小笠原', '好井', '谷口', '中西', '長谷川', '藤田', '滝口', '筒井', '黒川'
+    ]
   },
   {
     eventName: EventName.Tamaire,
     team: 'Aチーム',
     details: 'エントリーシート',
-    members: ['松浦', '橋本', '松下', '細川', '岡山', '平井', '別枝', '蓮井', '國方', '田中', '神内', '岡田', '仁木', '吉田', '金子', '藤井', '秋友', '河野', '藤井', '井上', '泉', '福岡', '東条', '國本', '工藤']
+    members: [
+      '松浦', '橋本', '松下', '細川', '岡山', '平井', '別枝', '蓮井',
+      '國方', '田中', '神内', '岡田', '仁木', '吉田', '金子',
+      { name: '藤井', grade: 2, department: 'NS' },
+      '秋友', '河野',
+      { name: '藤井', grade: 2, department: 'IB' },
+      '井上', '泉', { name: '福岡', grade: 3, department: 'IS・AI' }, '東条', '國本', '工藤'
+    ]
   },
   {
     eventName: EventName.TugOfWar,
     team: '男子',
     details: 'トーナメント',
-    members: ['向井', '佐々木', '三島', '山中', '野村', '片山', '福家', '山本', '南', '瀧', '井戸', '木内', '逸見', '藤本', '真嶋', '藤沢', '松永', '蕪木', '福岡', '泉']
+    members: ['向井', '佐々木', '三島', '山中', '野村', '片山', { name: '福家', grade: 2, department: 'IS・AI' }, '山本', '南', '瀧', '井戸', '木内', '逸見', '藤本', '真嶋', '藤沢', '松永', '蕪木', { name: '福岡', grade: 3, department: 'IS・AI' }, '泉']
   }
 ];
 
@@ -45,23 +72,27 @@ const processData = (): Map<string, Participant> => {
   const participantsMap = new Map<string, Participant>();
 
   for (const event of rawData) {
-    for (const memberName of event.members) {
+    for (const member of event.members) {
+      const name = typeof member === 'string' ? member : member.name;
+      const key = typeof member === 'string' ? name : `${name}|${member.grade}|${member.department}`;
+
       const newEvent: EventParticipation = {
         eventName: event.eventName,
         team: event.team,
         details: event.details,
       };
 
-      if (participantsMap.has(memberName)) {
-        const existingParticipant = participantsMap.get(memberName)!;
+      if (participantsMap.has(key)) {
+        const existingParticipant = participantsMap.get(key)!;
         existingParticipant.events.push(newEvent);
       } else {
         const newParticipant: Participant = {
-          name: memberName,
+          name, // keep plain name for display/search; key disambiguates identity
           school: SCHOOL_NAME,
           events: [newEvent],
+          ...(typeof member === 'object' ? { grade: member.grade, department: member.department } : {}),
         };
-        participantsMap.set(memberName, newParticipant);
+        participantsMap.set(key, newParticipant);
       }
     }
   }
@@ -102,7 +133,7 @@ export const memberDetails: MultiMemberDetails = {
   '内海': { grade: 1, department: 'IS' },
   '中條': { grade: 1, department: 'AI' },
   '柾木': { grade: 2, department: 'IS' },
-  '丸山': { grade: 3, department: 'IS・AI' },
+  '丸山': [{ grade: 1, department: 'IS・AI・NS' }, { grade: 3, department: 'IS・AI' }],
   '山中': { grade: 1, department: 'IS・AI・NS' },
   '宮野': { grade: 1, department: 'IS・AI・NS' },
   'ペア': { grade: 1, department: 'IS・AI・NS' },
@@ -129,16 +160,11 @@ export const memberDetails: MultiMemberDetails = {
   '細井': { grade: 3, department: 'IS・AI' },
   '高須賀': { grade: 3, department: 'IS・AI' },
   '小野': { grade: 1, department: 'IS・AI・NS' },
-  '丸山(1年)': { grade: 1, department: 'IS・AI・NS' },
-  '丸山(3年)': { grade: 3, department: 'IS・AI' },
-  '福岡(3年)': { grade: 3, department: 'IS・AI' },
-  '福岡(1年)': { grade: 1, department: 'IS・AI・NS' },
+  '福岡': [{ grade: 1, department: 'IS・AI・NS' }, { grade: 3, department: 'IS・AI' }],
   '森藤': { grade: 1, department: 'IS・AI・NS' },
-  '福家(2年)': { grade: 2, department: 'IS・AI' },
-  '福家(1年)': { grade: 1, department: 'IS・AI・NS' },
+  '福家': [{ grade: 1, department: 'IS・AI・NS' }, { grade: 2, department: 'IS・AI' }],
   '鴨井': { grade: 1, department: 'IS・AI・NS' },
-  '三嶋(2年)': { grade: 2, department: 'IS・AI' },
-  '三嶋(1年)': { grade: 1, department: 'IS・AI・NS' },
+  '三嶋': [{ grade: 1, department: 'IS・AI・NS' }, { grade: 2, department: 'IS・AI' }],
   '諏訪': { grade: 2, department: 'IS・AI' },
   '神内': { grade: 2, department: 'IS・AI' },
   '國方': { grade: 2, department: 'IS・AI' },
@@ -189,7 +215,10 @@ const validateDataIntegrity = () => {
   try {
     const allNames = new Set<string>();
     for (const e of rawData) {
-      for (const n of e.members) allNames.add(n);
+      for (const n of e.members) {
+        const name = typeof n === 'string' ? n : n.name;
+        allNames.add(name);
+      }
     }
 
     const detailKeys = new Set<string>(Object.keys(memberDetails));
@@ -215,8 +244,9 @@ const validateDataIntegrity = () => {
       const key = eventKey(e);
       const seenNames = seenByEvent.get(key) ?? new Set<string>();
       for (const n of e.members) {
-        if (seenNames.has(n)) duplicateNameInSameEvent.add(n);
-        seenNames.add(n);
+        const name = typeof n === 'string' ? n : n.name;
+        if (seenNames.has(name)) duplicateNameInSameEvent.add(name);
+        seenNames.add(name);
       }
       seenByEvent.set(key, seenNames);
     }

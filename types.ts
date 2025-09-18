@@ -17,6 +17,9 @@ export interface Participant {
   name: string;
   school: string;
   events: EventParticipation[];
+  // Optional identity metadata to disambiguate homonyms
+  grade?: number;
+  department?: string;
 }
 
 export interface ParticipantDetails {
