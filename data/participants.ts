@@ -23,8 +23,8 @@ export const rawData: { eventName: EventName; team: string; details: string; mem
     members: [
       { name: '丸山', grade: 1, department: 'IS・AI・NS' },
       '山中', '宮野', 'ペア', '松下', '片山', '竹内', '平井',
-      '直井', '岩瀬', { name: '河野', grade: 2, department: 'IS・AI' }, '大塚', '森', '植村', '茶園', '水野',
-      { name: '矢野', grade: 2, department: 'IS・AI' }, '武智', '十川', '山崎悟',
+      '直井', '岩瀬', '河野', '大塚', '森', '植村', '茶園', '水野',
+      '矢野', '武智', '十川', '山崎悟',
       '太田', '真嶋', '三好',
       '上井', '高木', '今治', '木村',
       { name: '丸山', grade: 3, department: 'IS・AI' },
@@ -42,7 +42,7 @@ export const rawData: { eventName: EventName; team: string; details: string; mem
       { name: '福家', grade: 1, department: 'IS・AI・NS' },
       '中條', '鴨井', '内海',
       { name: '三嶋', grade: 1, department: 'IS・AI・NS' },
-      '諏訪', '柾木', '神内', '岩瀬', { name: '河野', grade: 2, department: 'IS・AI' }, '齋藤', '國方',
+      '諏訪', '柾木', '神内', '岩瀬', '河野', '齋藤', '國方',
       '福井', '中村', '山崎駿', '逸見',
       '岡', '小笠原', '好井', '谷口', '中西', '長谷川', '藤田', '滝口', '筒井', '黒川'
     ]
@@ -55,7 +55,7 @@ export const rawData: { eventName: EventName; team: string; details: string; mem
       '松浦', '橋本', '松下', '細川', '岡山', '平井', '別枝', '蓮井',
       '國方', '田中', '神内', '岡田', '仁木', '吉田', '金子',
       { name: '藤井', grade: 2, department: 'NS' },
-      '秋友', '河野',
+      '秋友', { name: '河野', grade: 2, department: 'IB' },
       { name: '藤井', grade: 2, department: 'IB' },
       '井上', '泉', { name: '福岡', grade: 3, department: 'IS・AI' }, '東条', '國本', '工藤'
     ]
@@ -143,13 +143,13 @@ export const memberDetails: MultiMemberDetails = {
   '平井': { grade: 1, department: 'IS・AI・NS' },
   '直井': { grade: 2, department: 'IS・AI' },
   '岩瀬': { grade: 2, department: 'IS・AI' },
-  '河野': [{ grade: 2, department: 'IS・AI' }, { grade: 2, department: 'IB' }],
+  '河野': { grade: 2, department: 'IS・AI' },
   '大塚': { grade: 2, department: 'IS・AI' },
   '森': { grade: 2, department: 'IS・AI' },
   '植村': { grade: 2, department: 'IS・AI' },
   '茶園': { grade: 2, department: 'IS・AI' },
   '水野': { grade: 2, department: 'IS・AI' },
-  '矢野': { grade: 2, department: 'IS・AI' },
+  '矢野': { grade: 2, department: 'NS' },
   '十川': { grade: 2, department: 'NS' },
   '太田': { grade: 2, department: 'IB' },
   '真嶋': { grade: 2, department: 'IB' },

@@ -1,0 +1,70 @@
+{
+  "generatedAt": "2025-09-18T16:08:00.000Z",
+  "school": "穴吹コンピュータカレッジ",
+  "summary": {
+    "totalTeams": 6,
+    "passed": 6,
+    "warnings": 2,
+    "errors": 0
+  },
+  "events": [
+    {
+      "eventName": "20人21脚",
+      "team": "20人21脚チーム",
+      "details": "学年内訳: 1年6名・2年9名・3年5名（計20名）",
+      "expectedTeamSize": 20,
+      "actualTeamSize": 20,
+      "status": "pass",
+      "notes": []
+    },
+    {
+      "eventName": "学校対抗リレー",
+      "team": "男子",
+      "details": "学校対抗",
+      "expectedTeamSize": 5,
+      "actualTeamSize": 5,
+      "status": "pass",
+      "notes": []
+    },
+    {
+      "eventName": "Let'sボール運び",
+      "team": "Aチーム",
+      "details": "Aコース",
+      "expectedTeamSize": 30,
+      "actualTeamSize": 30,
+      "status": "pass",
+      "notes": []
+    },
+    {
+      "eventName": "Let'sボール運び",
+      "team": "Bチーム",
+      "details": "Aコース",
+      "expectedTeamSize": 30,
+      "actualTeamSize": 30,
+      "status": "pass",
+      "notes": []
+    },
+    {
+      "eventName": "玉入れ",
+      "team": "Aチーム",
+      "details": "エントリーシート",
+      "expectedTeamSize": 25,
+      "actualTeamSize": 25,
+      "status": "pass",
+      "notes": []
+    },
+    {
+      "eventName": "綱引き",
+      "team": "男子",
+      "details": "トーナメント",
+      "expectedTeamSize": 20,
+      "actualTeamSize": 20,
+      "status": "pass",
+      "notes": []
+    }
+  ],
+  "missingRequiredTeams": [
+    { "eventName": "綱引き", "requirement": "男女別チーム", "missing": ["女子"] },
+    { "eventName": "学校対抗リレー", "requirement": "男子/女子 各1チーム", "missing": ["女子"] }
+  ]
+}

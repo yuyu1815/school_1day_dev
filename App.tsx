@@ -4,6 +4,11 @@ import { type Participant, type EventParticipation, type ParticipantDetails } fr
 import { ParticipantCard } from './components/ParticipantCard';
 import { EventParticipantsModal } from './components/EventParticipantsModal';
 import { EventList } from './components/EventList';
+import { validationReport } from './data/checks';
+
+// Expose validation report in console for quick checks
+// eslint-disable-next-line no-console
+console.info('[ValidationReport]', validationReport);
 
 // Define animations in Tailwind config or a style tag if needed. Here we define it in the component for simplicity.
 const animationStyle = `
