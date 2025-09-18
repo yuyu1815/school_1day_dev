@@ -1,0 +1,5 @@
+{
+  "name": "Sports Day Participant Search",
+  "description": "An application to quickly find which events a participant is scheduled for in the sports day event. Users can search by name to see a summary of the participant's events.",
+  "requestFramePermissions": []
+}
