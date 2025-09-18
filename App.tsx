@@ -81,10 +81,17 @@ const App: React.FC = () => {
         e.details === event.details
     );
     if (eventData) {
+      const occurrenceMap = new Map<string, number>();
       const participantsWithDetails: ParticipantDetails[] = eventData.members.map(name => {
-        const details = memberDetails[name];
+        const details = (memberDetails as Record<string, any>)[name];
         // Fallback for any participant not in the details map
         if (!details) return { name, grade: 0, department: '不明' };
+        if (Array.isArray(details)) {
+          const count = occurrenceMap.get(name) ?? 0;
+          const picked = details[Math.min(count, details.length - 1)];
+          occurrenceMap.set(name, count + 1);
+          return { name, ...picked };
+        }
         return { name, ...details };
       });
       setSelectedEvent({ event, participants: participantsWithDetails });

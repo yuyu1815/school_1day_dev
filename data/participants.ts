@@ -6,7 +6,7 @@ export const rawData: { eventName: EventName; team: string; details: string; mem
   {
     eventName: EventName.LeggedRace,
     team: '20人21脚チーム',
-    details: '',
+    details: '学年内訳: 1年6名・2年9名・3年5名（計20名）',
     members: ['玉城', '真島', '藤原', '向井', '河田', '三上', '齋藤', '森田', '一宮', '西村', '飯間', '山崎悟', '武智', '秋友', '岡', '滝口', '中野', '松永', '今治', '國本']
   },
   {
@@ -17,21 +17,21 @@ export const rawData: { eventName: EventName; team: string; details: string; mem
   },
   {
     eventName: EventName.BallCarry,
-    team: 'ACK Aチーム',
+    team: 'Aチーム',
     details: 'Aコース',
-    members: ['丸山', '山中', '宮野', '松下', '片山', '竹内', '平井', '直井', '岩瀬', '河野', '大塚', '森', '植村', '緒村', '茶園', '水野', '矢野', '武智', '十川', '山崎悟', '太田', '真嶋', '三好', '上井', '高木', '今治', '木村', '細井', '高須賀']
+    members: ['丸山(1年)', '山中', '宮野', 'ペア', '松下', '片山', '竹内', '平井', '直井', '岩瀬', '河野', '大塚', '森', '植村', '茶園', '水野', '矢野', '武智', '十川', '山崎悟', '太田', '真嶋', '三好', '上井', '高木', '今治', '木村', '丸山(3年)', '細井', '高須賀']
   },
   {
     eventName: EventName.BallCarry,
-    team: 'ACK Bチーム',
+    team: 'Bチーム',
     details: 'Aコース',
-    members: ['小野', '福岡', '玉城', '森藤', '福家', '中條', '鴨井', '内海', '三嶋', '諏訪', '柾木', '神内', '岩瀬', '河野', '齋藤', '國方', '福井', '中村', '山崎駿', '逸見', '岡', '小笠原', '好井', '谷口', '中西', '長谷川', '藤田', '滝口', '筒井', '黒川']
+    members: ['小野', '福岡(1年)', '玉城', '森藤', '福家(1年)', '中條', '鴨井', '内海', '三嶋(1年)', '諏訪', '柾木', '神内', '岩瀬', '河野', '齋藤', '國方', '福井', '中村', '山崎駿', '逸見', '岡', '小笠原', '好井', '谷口', '中西', '長谷川', '藤田', '滝口', '筒井', '黒川']
   },
   {
     eventName: EventName.Tamaire,
     team: 'Aチーム',
     details: 'エントリーシート',
-    members: ['松浦', '橋本', '松下', '細川', '岡山', '平井', '別枝', '蓮井', '國方', '田中', '神内', '岡田', '仁木', '吉田', '金子', '藤井', '秋友', '河野', '鎌井', '井上', '泉', '福岡', '東条', '國本', '工藤']
+    members: ['松浦', '橋本', '松下', '細川', '岡山', '平井', '別枝', '蓮井', '國方', '田中', '神内', '岡田', '仁木', '吉田', '金子', '藤井', '秋友', '河野', '藤井', '井上', '泉', '福岡', '東条', '國本', '工藤']
   },
   {
     eventName: EventName.TugOfWar,
@@ -76,11 +76,12 @@ export interface MemberDetail {
 }
 
 // Data extracted from the provided entry sheet images.
-export const memberDetails: Record<string, MemberDetail> = {
+export type MultiMemberDetails = Record<string, MemberDetail | MemberDetail[]>;
+export const memberDetails: MultiMemberDetails = {
   '玉城': { grade: 1, department: 'IS・AI・NS' },
   '真島': { grade: 1, department: 'IS・AI・NS' },
   '藤原': { grade: 1, department: 'IS・AI・NS' },
-  '向井': { grade: 1, department: 'IS・AI・NS' },
+  '向井': { grade: 1, department: 'NS' },
   '河田': { grade: 1, department: 'IS・AI・NS' },
   '三上': { grade: 1, department: 'IS・AI・NS' },
   '齋藤': { grade: 2, department: 'IS・AI' },
@@ -101,9 +102,10 @@ export const memberDetails: Record<string, MemberDetail> = {
   '内海': { grade: 1, department: 'IS' },
   '中條': { grade: 1, department: 'AI' },
   '柾木': { grade: 2, department: 'IS' },
-  '丸山': { grade: 1, department: 'IS・AI・NS' },
+  '丸山': { grade: 3, department: 'IS・AI' },
   '山中': { grade: 1, department: 'IS・AI・NS' },
   '宮野': { grade: 1, department: 'IS・AI・NS' },
+  'ペア': { grade: 1, department: 'IS・AI・NS' },
   '松下': { grade: 1, department: 'IS・AI・NS' },
   '片山': { grade: 1, department: 'IS・AI・NS' },
   '竹内': { grade: 1, department: 'IS・AI・NS' },
@@ -114,9 +116,8 @@ export const memberDetails: Record<string, MemberDetail> = {
   '大塚': { grade: 2, department: 'IS・AI' },
   '森': { grade: 2, department: 'IS・AI' },
   '植村': { grade: 2, department: 'IS・AI' },
-  '緒村': { grade: 2, department: 'IS・AI' },
   '茶園': { grade: 2, department: 'IS・AI' },
-  '水野': { grade: 2, department: 'NS' },
+  '水野': { grade: 2, department: 'IS・AI' },
   '矢野': { grade: 2, department: 'NS' },
   '十川': { grade: 2, department: 'NS' },
   '太田': { grade: 2, department: 'IB' },
@@ -128,20 +129,25 @@ export const memberDetails: Record<string, MemberDetail> = {
   '細井': { grade: 3, department: 'IS・AI' },
   '高須賀': { grade: 3, department: 'IS・AI' },
   '小野': { grade: 1, department: 'IS・AI・NS' },
-  '福岡': { grade: 1, department: 'IS・AI・NS' },
+  '丸山(1年)': { grade: 1, department: 'IS・AI・NS' },
+  '丸山(3年)': { grade: 3, department: 'IS・AI' },
+  '福岡(3年)': { grade: 3, department: 'IS・AI' },
+  '福岡(1年)': { grade: 1, department: 'IS・AI・NS' },
   '森藤': { grade: 1, department: 'IS・AI・NS' },
-  '福家': { grade: 1, department: 'IS・AI・NS' },
+  '福家(2年)': { grade: 2, department: 'IS・AI' },
+  '福家(1年)': { grade: 1, department: 'IS・AI・NS' },
   '鴨井': { grade: 1, department: 'IS・AI・NS' },
-  '三嶋': { grade: 2, department: 'IS・AI' },
+  '三嶋(2年)': { grade: 2, department: 'IS・AI' },
+  '三嶋(1年)': { grade: 1, department: 'IS・AI・NS' },
   '諏訪': { grade: 2, department: 'IS・AI' },
   '神内': { grade: 2, department: 'IS・AI' },
-  '國方': { grade: 2, department: 'NS' },
+  '國方': { grade: 2, department: 'IS・AI' },
   '福井': { grade: 2, department: 'NS' },
   '中村': { grade: 2, department: 'NS' },
   '山崎駿': { grade: 2, department: 'NS' },
   '逸見': { grade: 2, department: 'NS' },
   '小笠原': { grade: 2, department: 'IB' },
-  '好井': { grade: 2, department: 'IB' },
+  '好井': { grade: 3, department: 'IS・AI' },
   '谷口': { grade: 3, department: 'IS・AI' },
   '中西': { grade: 3, department: 'IS・AI' },
   '長谷川': { grade: 3, department: 'IS・AI' },
@@ -159,8 +165,7 @@ export const memberDetails: Record<string, MemberDetail> = {
   '仁木': { grade: 2, department: 'IS・AI' },
   '吉田': { grade: 2, department: 'NS' },
   '金子': { grade: 2, department: 'NS' },
-  '藤井': { grade: 2, department: 'NS' },
-  '鎌井': { grade: 2, department: 'IB' },
+  '藤井': [{ grade: 2, department: 'NS' }, { grade: 2, department: 'IB' }],
   '井上': { grade: 3, department: 'IS・AI' },
   '泉': { grade: 3, department: 'IS・AI' },
   '東条': { grade: 3, department: 'IS・AI' },
@@ -176,3 +181,54 @@ export const memberDetails: Record<string, MemberDetail> = {
   '藤沢': { grade: 3, department: 'IS・AI' },
   '蕪木': { grade: 3, department: 'IS・AI' },
 };
+
+
+// Lightweight runtime data validation to help spot issues during development.
+// This will log potential problems in the browser console.
+const validateDataIntegrity = () => {
+  try {
+    const allNames = new Set<string>();
+    for (const e of rawData) {
+      for (const n of e.members) allNames.add(n);
+    }
+
+    const detailKeys = new Set<string>(Object.keys(memberDetails));
+
+    const missingDetails = Array.from(allNames).filter((n) => !detailKeys.has(n));
+    if (missingDetails.length > 0) {
+      // eslint-disable-next-line no-console
+      console.warn('[DataCheck] memberDetails missing entries for:', missingDetails);
+    }
+
+    const unusedDetailKeys = Array.from(detailKeys).filter((k) => !allNames.has(k));
+    if (unusedDetailKeys.length > 0) {
+      // eslint-disable-next-line no-console
+      console.info('[DataCheck] memberDetails has unused keys (not referenced by any event):', unusedDetailKeys);
+    }
+
+    // Detect same name repeated in the same event block (often indicates homonyms)
+    const duplicateNameInSameEvent = new Set<string>();
+    const eventKey = (e: { eventName: any; team: string; details: string }) => `${e.eventName}|${e.team}|${e.details}`;
+    const seenByEvent = new Map<string, Set<string>>();
+
+    for (const e of rawData) {
+      const key = eventKey(e);
+      const seenNames = seenByEvent.get(key) ?? new Set<string>();
+      for (const n of e.members) {
+        if (seenNames.has(n)) duplicateNameInSameEvent.add(n);
+        seenNames.add(n);
+      }
+      seenByEvent.set(key, seenNames);
+    }
+
+    if (duplicateNameInSameEvent.size > 0) {
+      // eslint-disable-next-line no-console
+      console.info('[DataCheck] Same name appears multiple times within the same event (likely homonyms):', Array.from(duplicateNameInSameEvent));
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('[DataCheck] validation failed:', err);
+  }
+};
+
+validateDataIntegrity();
