@@ -5,6 +5,9 @@ import { ParticipantCard } from './components/ParticipantCard';
 import { EventParticipantsModal } from './components/EventParticipantsModal';
 import { EventList } from './components/EventList';
 import { validationReport } from './data/checks';
+import { Timetable } from './components/Timetable';
+import { eventOrder } from './data/timetable';
+import { EventName } from './types';
 
 // Expose validation report in console for quick checks
 // eslint-disable-next-line no-console
@@ -52,7 +55,9 @@ const App: React.FC = () => {
             });
         }
     });
-    return Array.from(uniqueEventsMap.values());
+    const arr = Array.from(uniqueEventsMap.values());
+    arr.sort((a, b) => (eventOrder[a.eventName] ?? 999) - (eventOrder[b.eventName] ?? 999));
+    return arr;
   }, []);
 
   const normalizeQuery = useCallback((q: string) => {
@@ -165,6 +170,35 @@ const App: React.FC = () => {
   const handleCloseModal = () => {
     setSelectedEvent(null);
   };
+
+  const handleTimetableEventClick = useCallback((eventName: EventName) => {
+    // Aggregate all entries for this eventName
+    const entries = rawData.filter((e) => e.eventName === eventName);
+    if (entries.length === 0) return;
+    const occurrenceMap = new Map<string, number>();
+    const mergedMembers: ParticipantDetails[] = [];
+    for (const eventData of entries) {
+      for (const m of (eventData.members as any[])) {
+        if (typeof m === 'object' && m && 'name' in m && 'grade' in m && 'department' in m) {
+          mergedMembers.push({ name: m.name as string, grade: m.grade as number, department: m.department as string });
+        } else {
+          const name = m as string;
+          const details = (memberDetails as Record<string, any>)[name];
+          if (!details) { mergedMembers.push({ name, grade: 0, department: '不明' }); continue; }
+          if (Array.isArray(details)) {
+            const count = occurrenceMap.get(name) ?? 0;
+            const picked = details[Math.min(count, details.length - 1)];
+            occurrenceMap.set(name, count + 1);
+            mergedMembers.push({ name, ...picked });
+          } else {
+            mergedMembers.push({ name, ...details });
+          }
+        }
+      }
+    }
+    const syntheticEvent: EventParticipation = { eventName, team: '全カテゴリ', details: '全チーム' } as EventParticipation;
+    setSelectedEvent({ event: syntheticEvent, participants: mergedMembers });
+  }, []);
   
   const InfoCard: React.FC<{icon: string; title: string; text: string;}> = ({icon, title, text}) => (
      <div className="text-center p-8 bg-slate-800 border border-slate-700 rounded-xl max-w-lg animate-fade-in">
@@ -207,7 +241,10 @@ const App: React.FC = () => {
 
         <main className="w-full flex justify-center px-4 pb-16">
           {searchResults === undefined && (
-             <EventList events={uniqueEvents} onEventClick={handleEventClick} />
+            <div className="w-full flex flex-col items-center">
+              <Timetable onCompetitionClick={handleTimetableEventClick} />
+              <EventList events={uniqueEvents} onEventClick={handleEventClick} />
+            </div>
           )}
           {searchResults !== undefined && searchResults.length === 0 && (
             <InfoCard icon="🤷" title="選手が見つかりません" text="入力した名前をもう一度確認してください。部分一致で検索されます。" />

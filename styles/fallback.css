@@ -1,0 +1,101 @@
+/* Minimal fallback styles when Tailwind CDN fails to load.
+   Only applied when body has class .tw-fallback so it won't fight with Tailwind. */
+
+:root { --slate-900: #0f172a; --slate-800: #1f2937; --slate-700: #334155; --slate-600: #475569; --slate-500: #64748b; --slate-400: #94a3b8; --slate-300: #cbd5e1; --indigo-600: #4f46e5; --indigo-500: #6366f1; --indigo-700: #4338ca; --indigo-900: #1e1b4b; --amber-600: #d97706; --amber-700: #b45309; --amber-900: #78350f; }
+
+body.tw-fallback { background: var(--slate-900); color: #fff; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+
+/* Layout helpers */
+body.tw-fallback .flex{ display:flex; }
+body.tw-fallback .flex-col{ flex-direction:column; }
+body.tw-fallback .items-center{ align-items:center; }
+body.tw-fallback .justify-center{ justify-content:center; }
+body.tw-fallback .flex-1{ flex:1 1 0%; }
+body.tw-fallback .flex-shrink-0{ flex-shrink:0; }
+body.tw-fallback .w-full{ width:100%; }
+body.tw-fallback .max-w-lg{ max-width:32rem; }
+body.tw-fallback .max-w-2xl{ max-width:42rem; }
+body.tw-fallback .max-w-4xl{ max-width:56rem; }
+
+/* Spacing */
+body.tw-fallback .p-4{ padding:1rem; }
+body.tw-fallback .p-8{ padding:2rem; }
+body.tw-fallback .px-2{ padding-left:0.5rem; padding-right:0.5rem; }
+body.tw-fallback .px-6{ padding-left:1.5rem; padding-right:1.5rem; }
+body.tw-fallback .py-0\.5{ padding-top:0.125rem; padding-bottom:0.125rem; }
+body.tw-fallback .py-4{ padding-top:1rem; padding-bottom:1rem; }
+body.tw-fallback .pl-5{ padding-left:1.25rem; }
+body.tw-fallback .pr-20{ padding-right:5rem; }
+body.tw-fallback .m-1\.5{ margin:0.375rem; }
+body.tw-fallback .mb-2{ margin-bottom:0.5rem; }
+body.tw-fallback .mb-4{ margin-bottom:1rem; }
+body.tw-fallback .mb-6{ margin-bottom:1.5rem; }
+body.tw-fallback .mb-8{ margin-bottom:2rem; }
+body.tw-fallback .mb-10{ margin-bottom:2.5rem; }
+body.tw-fallback .mt-1{ margin-top:0.25rem; }
+body.tw-fallback .gap-2{ gap:0.5rem; }
+body.tw-fallback .gap-4{ gap:1rem; }
+body.tw-fallback .gap-6{ gap:1.5rem; }
+body.tw-fallback .gap-8{ gap:2rem; }
+body.tw-fallback .space-y-3 > :not([hidden]) ~ :not([hidden]){ margin-top:0.75rem; }
+
+/* Typography */
+body.tw-fallback .text-xs{ font-size:0.75rem; line-height:1rem; }
+body.tw-fallback .text-sm{ font-size:0.875rem; line-height:1.25rem; }
+body.tw-fallback .text-lg{ font-size:1.125rem; line-height:1.75rem; }
+body.tw-fallback .text-2xl{ font-size:1.5rem; line-height:2rem; }
+body.tw-fallback .text-3xl{ font-size:1.875rem; line-height:2.25rem; }
+body.tw-fallback .text-4xl{ font-size:2.25rem; line-height:2.5rem; }
+body.tw-fallback .text-5xl{ font-size:3rem; line-height:1; }
+body.tw-fallback .font-bold{ font-weight:700; }
+body.tw-fallback .font-extrabold{ font-weight:800; }
+body.tw-fallback .font-semibold{ font-weight:600; }
+body.tw-fallback .font-medium{ font-weight:500; }
+
+/* Colors */
+body.tw-fallback .text-white{ color:#fff; }
+body.tw-fallback .text-slate-400{ color: var(--slate-400); }
+body.tw-fallback .text-slate-300{ color: var(--slate-300); }
+body.tw-fallback .text-slate-100{ color: #f1f5f9; }
+body.tw-fallback .text-indigo-400{ color:#818cf8; }
+body.tw-fallback .bg-slate-900{ background: var(--slate-900); }
+body.tw-fallback .bg-slate-800{ background: var(--slate-800); }
+body.tw-fallback .bg-indigo-600{ background: var(--indigo-600); color:#fff; }
+body.tw-fallback .bg-indigo-900\/30{ background: rgba(30,27,75,0.3); }
+body.tw-fallback .bg-amber-900\/30{ background: rgba(120,53,15,0.3); }
+body.tw-fallback .text-indigo-50{ color:#eef2ff; }
+body.tw-fallback .text-amber-50{ color:#fffbeb; }
+body.tw-fallback .bg-amber-600{ background: var(--amber-600); color:#000; }
+
+/* Borders and radius */
+body.tw-fallback .border{ border:1px solid var(--slate-700); }
+body.tw-fallback .border-slate-700{ border-color: var(--slate-700); }
+body.tw-fallback .border-indigo-700\/60{ border-color: rgba(67,56,202,0.6); }
+body.tw-fallback .border-amber-700\/60{ border-color: rgba(180,83,9,0.6); }
+body.tw-fallback .rounded-xl{ border-radius:0.75rem; }
+body.tw-fallback .rounded-lg{ border-radius:0.5rem; }
+body.tw-fallback .rounded-full{ border-radius:9999px; }
+
+/* Positioning */
+body.tw-fallback .relative{ position:relative; }
+body.tw-fallback .absolute{ position:absolute; }
+body.tw-fallback .inset-y-0{ top:0; bottom:0; }
+body.tw-fallback .right-0{ right:0; }
+
+/* Components approximation */
+body.tw-fallback header.text-center{ text-align:center; }
+body.tw-fallback input[type="text"]{ background: var(--slate-800); color:#fff; border:1px solid var(--slate-700); border-radius:9999px; padding:1rem 5rem 1rem 1.25rem; outline:none; }
+body.tw-fallback input::placeholder{ color: var(--slate-400); }
+body.tw-fallback button{ cursor:pointer; border:none; }
+body.tw-fallback .hover\:bg-indigo-500{ /* no hover in fallback; keep base color */ }
+body.tw-fallback .focus\:ring-2, body.tw-fallback .focus\:outline-none{ outline:none; }
+body.tw-fallback .text-center{ text-align:center; }
+
+/* Cards */
+body.tw-fallback .card, body.tw-fallback .border.rounded-lg{ background: rgba(255,255,255,0.02); border-color: var(--slate-700); }
+
+/* Utility for badge */
+body.tw-fallback .badge{ font-size:0.75rem; font-weight:700; padding:0.25rem 0.5rem; border-radius:0.25rem; }
+
+/* Animations fallbacks: no-op */
+body.tw-fallback .animate-fade-in, body.tw-fallback .animate-fade-in-fast, body.tw-fallback .animate-slide-up{ opacity:1; transform:none; }
