@@ -14,7 +14,7 @@ export const rawData: { eventName: EventName; team: string; details: string; mem
     eventName: EventName.Relay,
     team: '男子',
     details: '学校対抗',
-    members: ['野村', '向井', '内海', '中條', '柾木']
+    members: ['河野', '向井', '内海', '中條', '柾木']
   },
   {
     eventName: EventName.BallCarry,
